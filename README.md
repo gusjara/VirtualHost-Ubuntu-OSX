@@ -10,8 +10,8 @@ You can grab the [script here](https://raw.github.com/miguelzilli/virtualhost.sh
 You'll need to `chmod +x virtualhost.sh` in order to run it after downloading.
 
 ## Usage
-		sudo sh virtualhost.sh [--add|--delete] <name> [-y]
-       	sudo sh virtualhost.sh [OPTION]
+	sudo sh virtualhost.sh [--add|--delete] <name> [-y]
+	sudo sh virtualhost.sh [OPTION]
 Where <name> is the one-word name you would like to use. (e.g. mysite)
 If '-y' option is given all prompting will assume the default answer.
 
