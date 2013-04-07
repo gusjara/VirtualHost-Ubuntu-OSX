@@ -125,7 +125,7 @@ OWNER_GROUP="www-data"
 
 # Set the browser to use. In Ubuntu you can use xdg-open to use the system 
 # default browser, but you can use your own browser.
-#OPEN_COMMAND="/usr/bin/xdg-open"
+OPEN_COMMAND="/usr/bin/xdg-open"
 #OPEN_COMMAND="/usr/bin/firefox -new-tab"
 
 # You can now store your configuration directions in a ~/.virtualhost.sh.conf
@@ -611,11 +611,11 @@ case $resp in
         FOLDER=$DOC_ROOT_FOLDER_MATCH/public
       fi
     elif [ -d $DOC_ROOT_FOLDER_MATCH/web ]; then
-      /bin/echo -n "Found a web folder suggesting a Symfony project. Use as DocumentRoot? [y/N]: "
+      /bin/echo -n "Found a web folder suggesting a Symfony project. Use as DocumentRoot? [Y/n]: "
       if [ -z "$BATCH_MODE" ]; then
         read response
       else
-        response="N"
+        response="Y"
         /bin/echo $response
       fi
       if checkyesno ${response} ; then
@@ -645,7 +645,6 @@ if checkyesno ${PROMPT_FOR_LOGS}; then
     y*|Y*)
       log="1"
     ;;
-
     *)
       log=""
     ;;
