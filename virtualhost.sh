@@ -81,16 +81,11 @@ LOG_FOLDER="/var/log/apache2"
 # SCRIPT BEHAIVIOR AND EXTRAS
 ###############################################################################
 
-# If defined, a ServerAlias os $1.$WILDCARD_ZONE will be added to the virtual
-# host file. This is useful if you, for example, have setup a wildcard domain
-# either on your own DNS server or using a server like dyndns.org. For example,
-# if my local IP of 10.0.42.42 is static (which can still be achieved using a
-# well-configured DHCP server or an Apple Airport Extreme 802.11n base station)
-# and I create a host on dyndns.org of patrickdev.dyndns.org with wildcard
-# hostnames turned on, then defining my WILDCARD_ZONE to "patrickdev.dyndns.org"
-# will enable access to my virtual host from any machine on the network. Note
-# that this would also work with a public IP too, and the virtual hosts on your
-# machine would be accessible to anyone on the internets.
+# By default, the site folder that get created will be owned by this group
+OWNER_GROUP="www-data"
+
+# If defined, a ServerAlias (e.g. mysite.$WILDCARD_ZONE) will be added to the
+# virtual host file. 
 #WILDCARD_ZONE="my.wildcard.host.address"
 
 # Batch mode (all prompting will assume the default value). Any value will 
@@ -102,18 +97,15 @@ LOG_FOLDER="/var/log/apache2"
 # A feature to specify a custom log location within your site's document root
 # was requested, and so you will be prompted about this when you create a new
 # virtual host. If you do not want to be prompted, set the following to "no":
-PROMPT_FOR_LOGS="no"
+PROMPT_FOR_LOGS="No"
 
 # If you do not want to be prompted, but you do always want to have the site-
 # specific logs folder, set PROMPT_FOR_LOGS="no" and enable this:
-ALWAYS_CREATE_LOGS="yes"
+ALWAYS_CREATE_LOGS="Yes"
 
 # If you have an atypical setup, and you don't need or want entries in your
 # /etc/hosts file, you can set the following option to "yes".
-SKIP_ETC_HOSTS="no"
-
-# By default, the site folder that get created will be owned by this group
-OWNER_GROUP="www-data"
+SKIP_ETC_HOSTS="No"
 
 # If you don't want to create an example index.html in your virtual host folder
 # uncomment the following line:
@@ -306,32 +298,32 @@ print_config()
   else
     XAMPP_FOR_LINUX2="Using XAMPP for Linux."
     if [ -z $APACHE_HTTPD_CONF ]; then
-      APACHE_HTTPD_CONF2="ERROR: you need to indicate the path to httpd.conf file"
+      APACHE_HTTPD_CONF2="ERROR: you need to indicate the path to httpd.conf file."
     else
       if [ -e $APACHE_HTTPD_CONF ]; then
         APACHE_HTTPD_CONF2=$APACHE_HTTPD_CONF
       else
-        APACHE_HTTPD_CONF2="ERROR: File not found: $APACHE_HTTPD_CONF"
+        APACHE_HTTPD_CONF2="ERROR: $APACHE_HTTPD_CONF file not found."
       fi
     fi
   fi
 
   if [ -z $SKIP_INDEX_CREATION ]; then
-    SKIP_INDEX_CREATION2="no"
+    SKIP_INDEX_CREATION2="No"
   else
-    SKIP_INDEX_CREATION2="yes"
+    SKIP_INDEX_CREATION2="Yes"
   fi
 
   if [ -z $SKIP_BROWSER ]; then
     SKIP_BROWSER2="No"
     if [ -z "$OPEN_COMMAND" ]; then
-      OPEN_COMMAND2="ERROR: you need to specify an OPEN_COMMAND"
+      OPEN_COMMAND2="ERROR: you need to specify an OPEN_COMMAND."
     else
       OPEN_COMMAND2=$OPEN_COMMAND
     fi
   else
-    SKIP_BROWSER2="yes"
-    OPEN_COMMAND2="No needed"
+    SKIP_BROWSER2="Yes"
+    OPEN_COMMAND2="No needed."
   fi
 
 cat << __EOT
@@ -699,11 +691,11 @@ fi
 
 # Create the virtualhost config file
 /bin/echo -n " *Creating virtual host file... "
-create_virtualhost $VIRTUALHOST "${FOLDER}" $log
+create_virtualhost "${VIRTUALHOST}" "${FOLDER}" $log
 if [ -z $XAMPP_FOR_LINUX ]; then
   /usr/sbin/a2ensite $VIRTUALHOST 1>/dev/null 2>/dev/null
 else
-  /bin/echo "Include $VIRTUAL_HOSTS_AVAILABLE/$1" >> $APACHE_HTTPD_CONF
+  /bin/echo "Include $VIRTUAL_HOSTS_AVAILABLE/${VIRTUALHOST}" >> $APACHE_HTTPD_CONF
 fi
 /bin/echo "Done"
 
@@ -712,10 +704,8 @@ restart_apache
 # Launch the new URL in the browser
 if [ -z $SKIP_BROWSER ]; then
   /bin/echo -n " *Launching virtual host... "
-  su $USER -c "$OPEN_COMMAND http://$VIRTUALHOST:$APACHE_PORT/"
+  su $USER -c "$OPEN_COMMAND http://${VIRTUALHOST}:${APACHE_PORT}/"
  /bin/echo "Done"
 fi
 
-cat << __EOF
-Virtual host http://$VIRTUALHOST:$APACHE_PORT/ is setup and ready for use.
-__EOF
+/bin/echo "Virtual Host http://${VIRTUALHOST}:${APACHE_PORT}/ is setup and ready for use."
