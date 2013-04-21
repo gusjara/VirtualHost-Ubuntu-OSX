@@ -523,13 +523,14 @@ fi
 ################################################################################
 FIRSTNAME=`pinky | awk '{print $2}' | tail -n 1`
 cat << __EOT
-Hi $FIRSTNAME! Welcome to virtualhost.sh. This script will guide you through setting up a new name-based virtual host.
+Hi $FIRSTNAME! Welcome to virtualhost.sh 
+This script will guide you through setting up a new name-based virtual host.
 __EOT
 echo -n "Do you wish to continue? [Y/n]: "
 if [ -z BATCH_MODE ]; then
   read continue
 else
-  resp="Y"
+  continue="Y"
   echo $continue
 fi
 case $continue in
@@ -704,7 +705,7 @@ restart_apache
 # Launch the new URL in the browser
 if [ -z $SKIP_BROWSER ]; then
   /bin/echo -n " *Launching virtual host... "
-  su $USER -c "$OPEN_COMMAND http://${VIRTUALHOST}:${APACHE_PORT}/"
+  su $USER -c "$OPEN_COMMAND http://${VIRTUALHOST}:${APACHE_PORT}/index.html"
  /bin/echo "Done"
 fi
 
